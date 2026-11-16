@@ -10,7 +10,6 @@ takes a person, in ``review.py``.
 
 from __future__ import annotations
 
-import hashlib
 import json
 import shutil
 from collections.abc import Callable
@@ -52,6 +51,23 @@ def lines_for_model(transcript: Transcript, redactions: list[Redaction]) -> list
     ]
 
 
+def transcript_for(
+    bait: Bait, speech_model: str = DEFAULT_MODEL, fresh: bool = False, report: Report = _quiet
+) -> Transcript:
+    """The bait's transcript, made on this computer the first time it is needed."""
+    path = workspace.bait_dir(bait.id) / "transcript.json"
+    if path.exists() and not fresh:
+        transcript = workspace.load(path, Transcript)
+    else:
+        report("Transcribing", 0.0, f"speech model {speech_model}, on this computer")
+        transcript = transcribe(
+            Path(bait.source_path), speech_model, lambda p: report("Transcribing", p, "")
+        )
+        workspace.save(path, transcript)
+    report("Transcribing", 1.0, f"{len(transcript.segments)} lines")
+    return transcript
+
+
 def run(
     bait: Bait,
     *,
@@ -68,37 +84,23 @@ def run(
     cards = guide()
 
     # 1. Transcribe, on this computer.
-    path = folder / "transcript.json"
-    if path.exists() and not fresh:
-        transcript = workspace.load(path, Transcript)
-    else:
-        report("Transcribing", 0.0, f"speech model {speech_model}, on this computer")
-        transcript = transcribe(recording, speech_model, lambda p: report("Transcribing", p, ""))
-        workspace.save(path, transcript)
-    report("Transcribing", 1.0, f"{len(transcript.segments)} lines")
+    transcript = transcript_for(bait, speech_model, fresh, report)
 
     # 2. Redact. Cheap, so always recomputed: the allow list may have changed.
+    # The allow list is saved so `baitreel eval` can redo redaction the same way.
     redactions = redact.find_redactions(transcript.segments, allow)
     workspace.save(folder / "redactions.json", redactions)
+    (folder / "allow.json").write_text(json.dumps(sorted(allow or [])) + "\n")
     report("Redacting", 1.0, f"{len(redactions)} personal details masked")
 
     # 3. Spot flags. The model only ever sees the masked lines.
     lines = lines_for_model(transcript, redactions)
-    if spotter == "auto":
-        spotter = "local" if local.available()[0] else "keywords"
-    fingerprint = hashlib.sha256(
-        "\n".join([spotter, local.model_name(), *(line.text for line in lines)]).encode()
-    ).hexdigest()[:16]
-    path = folder / f"flags.{spotter}.{fingerprint}.json"
-    if path.exists() and not fresh:
-        flags = workspace.load(path, list[Flag])
-        spotter_name = flags[0].spotter if flags else spotter
-    else:
-        report("Spotting flags", 0.0, f"spotter: {spotter}")
-        flags, spotter_name = spot.run(
-            lines, cards, spotter, lambda p: report("Spotting flags", p, "")
-        )
-        workspace.save(path, flags)
+    report("Spotting flags", 0.0, f"spotter: {spotter}")
+    spotted = spot.run(
+        folder, lines, cards, spotter, fresh=fresh,
+        on_progress=lambda p: report("Spotting flags", p, ""),
+    )  # fmt: skip
+    flags, spotter, spotter_name = spotted.flags, spotted.spotter, spotted.name
     workspace.save(folder / "flags.json", flags)
     report("Spotting flags", 1.0, f"{len(flags)} flags, spotter: {spotter_name}")
 

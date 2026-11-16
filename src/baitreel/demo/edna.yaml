@@ -6,8 +6,11 @@
 # number below are invented. Phone numbers use the 555-01xx range that is
 # reserved for fiction.
 #
-# Each scammer line names the tactic it demonstrates. The pipeline never sees
-# these labels; they are the answer key.
+# Each scammer line names the tactic it demonstrates, and `personal` lists the
+# details a careful person would want bleeped. The pipeline never sees these;
+# they are the answer key that `baitreel eval` scores the demo against.
+# Edna and Gerald are the scambaiter's invented persona, so they are not
+# personal details.
 
 title: Edna and the sourdough starter
 credit: Baitreel demo script (synthetic voices)
@@ -17,6 +20,7 @@ voices:
 turns:
   - speaker: scammer
     tactic: the-badge
+    personal: [Daniel Hart]
     text: >
       Hello, this is Officer Daniel Hart from the fraud department at
       Fernhollow Bank. Am I speaking with Mrs. Edna Pruitt?
@@ -38,6 +42,7 @@ turns:
       Please listen carefully. For your own protection, do not hang up this
       call. Stay on the line with me until this is resolved.
   - speaker: target
+    personal: [Margaret Dolan, 5 5 5 0 1 4 2]
     text: >
       All right. Should I call my neighbor? She used to work at a bank.
       Her name is Margaret Dolan. Her number is 5 5 5, 0 1 4 2.
@@ -62,6 +67,7 @@ turns:
       First I must verify your identity. I am sending a six digit code to
       your phone. Read me the code as soon as you receive it.
   - speaker: target
+    personal: [4 7 1 9 2 0]
     text: >
       It says 4 7 1 9 2 0. Oh dear, was I supposed to read that out loud?
   - speaker: scammer

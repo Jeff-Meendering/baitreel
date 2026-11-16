@@ -65,7 +65,8 @@ BAITREEL_HOME=/some/temp/folder uv run baitreel demo < /dev/null
 ```
 
 With no keyboard attached, the demo drafts and renders clips and then stops
-at review, which is the correct behavior.
+at review, which is the correct behavior. After it, `baitreel eval --no-browser`
+scores the demo against the answer key in its script.
 
 ## Things learned the hard way
 

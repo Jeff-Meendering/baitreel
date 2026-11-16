@@ -15,8 +15,9 @@ the red flag, and tells the viewer what to do instead.
 *Frames from the scripted demo call. The voices are synthetic and nothing in it is real.*
 
 > **Status: early.** Milestone 1 works from the command line: one recording
-> in, finished draft clips out, with a person approving each one. A web app
-> for reviewing comes later. See [ROADMAP.md](ROADMAP.md) for what is next and
+> in, finished draft clips out, with a person approving each one. Milestone 2
+> measures how good it is: you label a call by hand and Baitreel is scored
+> against you. A web app for reviewing comes later. See [ROADMAP.md](ROADMAP.md) for what is next and
 > [VISION.md](VISION.md) for why this exists.
 
 ## The promises
@@ -129,10 +130,89 @@ You upload it yourself, wherever you like.
 | `--fresh` | Ignore saved work and start over. |
 
 Other commands: `baitreel review` lists your baits and reopens a review,
-`baitreel guide` prints the Field Guide.
+`baitreel guide` prints the Field Guide, and `baitreel label` and
+`baitreel eval` measure how well it works (next section).
 
 Working files live in `~/Baitreel` (change it with `BAITREEL_HOME`), well
 away from any Git repository.
+
+## Measure it: a second opinion
+
+Baitreel makes mistakes. To find out how many, a person labels a call by
+hand, without seeing Baitreel's answers, and Baitreel is scored against them.
+
+**Try it on the demo first.** The demo script carries its own answer key, so
+after `baitreel demo` you can go straight to:
+
+```bash
+uv run baitreel eval
+```
+
+**Label a real call.** Label it *before* you cut it, so you cannot be swayed
+by Baitreel's flags:
+
+```bash
+uv run baitreel label path/to/recording.mp3 --credit "Your Channel Name"
+```
+
+This transcribes the recording (only that) and opens a labeling page in your
+browser. It runs on your computer and nowhere else. Play the call, read along,
+and:
+
+- select the words where the caller uses a tactic, then pick the tactic from
+  the Field Guide list, and
+- select **every personal detail you hear** (names, numbers, codes,
+  addresses) and mark it. Trust your ears: if the transcript got the words
+  wrong, press `[` and `]` while it plays to mark by time.
+
+Labels are saved as you go. Press **Finish** when you have been through the
+whole call. Only finished labels are scored. To reopen a call later, use its
+bait id: `baitreel label BAIT_ID`.
+
+**Prefer Audacity?** Add a label track, label each tactic by its name ("The
+Hush") and each personal detail as `pii` (or `pii:name`, `pii:number`), then
+File > Export > Export Labels, and:
+
+```bash
+uv run baitreel label BAIT_ID --import labels.txt --labeler "Your Name"
+```
+
+**Score it.** Cut the call as usual, then:
+
+```bash
+uv run baitreel eval
+```
+
+The report opens in your browser. It lives in `~/Baitreel/eval/`:
+
+| File | What it is |
+|---|---|
+| `report.html` | Scores, charts and examples of disagreements. Prints cleanly. |
+| `charts/*.svg` | Each chart on its own, ready to drop into a document |
+| `scores.json` | Every number in the report |
+
+It scores:
+
+- **Flag spotting**, per tactic: precision (how many flags were right), recall
+  (how many labeled moments were found) and F1, plus Cohen's kappa for
+  overall agreement.
+- **Redaction recall**: the share of hand-marked personal details that the
+  bleeps fully cover. This is the number that matters most.
+
+The report numbers calls and calls labelers "Labeler A", so it names no one,
+and quotes in it are masked. Still read it before you share it.
+
+**Compare models and prompts.** Every spotter's answer is saved with the
+model and a fingerprint of its prompt, so earlier versions stay in the
+report next to new ones. To add a local model to the comparison:
+
+```bash
+uv run baitreel eval --model gemma4:12b --model qwen3:8b
+```
+
+Each model takes minutes per call, one request at a time. If a second person
+labels the same call, the report shows how well two people agree, which is
+the realistic ceiling for any spotter.
 
 ## The clip format: Flag on the Play
 
@@ -153,7 +233,7 @@ Please read these before relying on it.
   model mishears a name as an ordinary word, no rule will catch it. This is
   why approval requires playing the whole clip. Listen for names and numbers.
 - **Flag spotting makes mistakes**, and the keyword spotter makes more. It
-  cannot tell who is speaking. Milestone 2 measures both against a human.
+  cannot tell who is speaking. `baitreel eval` measures how often.
 - **Speaker tags are a model's guess** from the text, not from the voices.
 - **English only**, for now.
 - **Field Guide cards are drafts** until a human reviewer has checked each one
@@ -181,6 +261,11 @@ recording -> transcribe -> redact -> spot flags -> draft -> render -> human revi
 | `review.py` | The human gate |
 | `publish.py` | Writes the publish kit |
 | `pipeline.py` | Runs the stages in order and reuses saved work |
+| `labels.py` | Hand-made labels: label files, Audacity label tracks, the demo answer key |
+| `labeling/` | The blind labeling page and the small local server behind it |
+| `scoring.py` | Precision, recall, F1, Cohen's kappa and redaction coverage |
+| `evaluate.py` | Gathers labels and spotter runs for each call and scores them |
+| `report.py` | Writes the evaluation report and its charts |
 
 Every stage saves plain JSON in the bait's working folder, so you can inspect
 exactly what each step decided.

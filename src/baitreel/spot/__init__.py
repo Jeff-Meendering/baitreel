@@ -9,18 +9,27 @@ Two spotters ship today:
   measures the model against.
 
 To add another spotter, write a module with a ``spot(lines, guide)`` function
-and add it to ``run`` below. Whatever a model returns goes through
-``validate`` before it becomes a flag.
+and a ``version`` fingerprint, and add it to ``run`` below. Whatever a model
+returns goes through ``validate`` before it becomes a flag.
+
+Every result is saved as a ``Run`` in the bait's ``runs/`` folder, labeled
+with the spotter, its version and the lines it read. Runs are reused when
+nothing has changed, and ``baitreel eval`` scores them side by side.
 """
 
 from __future__ import annotations
 
+import hashlib
 import re
+import time
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import UTC, datetime
+from pathlib import Path
 
+from .. import workspace
 from ..fieldguide import Tactic
-from ..models import Flag
+from ..models import Flag, Run
 
 
 @dataclass(frozen=True)
@@ -106,20 +115,65 @@ def validate(
     return list({flag.id: flag for flag in flags}.values())
 
 
+def lines_fingerprint(lines: list[Line]) -> str:
+    """A fingerprint of exactly what a spotter reads: line numbers, times and masked text."""
+    text = "\n".join(f"{line.id}\t{line.start}\t{line.end}\t{line.text}" for line in lines)
+    return hashlib.sha256(text.encode()).hexdigest()[:8]
+
+
 def run(
+    folder: Path,
     lines: list[Line],
     guide: dict[str, Tactic],
     spotter: str = "auto",
+    model: str | None = None,
+    fresh: bool = False,
     on_progress: Callable[[float], None] | None = None,
-) -> tuple[list[Flag], str]:
-    """Spot flags. Returns the flags and the name of the spotter that ran."""
+) -> Run:
+    """Spot flags, or reuse a saved run that read the same lines with the same spotter.
+
+    ``folder`` is the bait's working folder. ``model`` picks the local model
+    (default: ``BAITREEL_MODEL``, else gemma4:12b).
+    """
     from . import keywords, local
 
     if spotter == "auto":
-        ready, _ = local.available()
-        spotter = "local" if ready else "keywords"
+        spotter = "local" if local.available(model)[0] else "keywords"
     if spotter == "local":
-        return local.spot(lines, guide, on_progress=on_progress), f"local/{local.model_name()}"
-    if spotter == "keywords":
-        return keywords.spot(lines, guide), "keywords"
-    raise ValueError(f"Unknown spotter {spotter!r}. Choose auto, local or keywords.")
+        model = model or local.model_name()
+        version = local.prompt_version(guide)
+    elif spotter == "keywords":
+        model = ""
+        version = keywords.version(guide)
+    else:
+        raise ValueError(f"Unknown spotter {spotter!r}. Choose auto, local or keywords.")
+
+    seen = lines_fingerprint(lines)
+    label = re.sub(r"[^a-z0-9]+", "-", f"{spotter}-{model}".lower()).strip("-")
+    path = folder / "runs" / f"{label}-{version}-{seen}.json"
+    if path.exists() and not fresh:
+        return workspace.load(path, Run)
+
+    began = time.monotonic()
+    if spotter == "local":
+        flags = local.spot(lines, guide, on_progress=on_progress, model=model)
+    else:
+        flags = keywords.spot(lines, guide)
+    result = Run(
+        id=path.stem,
+        spotter=spotter,
+        model=model,
+        version=version,
+        lines=seen,
+        seconds=round(time.monotonic() - began, 1),
+        created_at=datetime.now(UTC),
+        flags=flags,
+    )
+    workspace.save(path, result)
+    return result
+
+
+def saved_runs(folder: Path) -> list[Run]:
+    """Every run saved for one bait, oldest first."""
+    runs = [workspace.load(p, Run) for p in sorted((folder / "runs").glob("*.json"))]
+    return sorted(runs, key=lambda r: r.created_at)
