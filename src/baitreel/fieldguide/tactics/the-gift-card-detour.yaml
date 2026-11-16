@@ -1,0 +1,26 @@
+id: the-gift-card-detour
+name: The Gift Card Detour
+plain_label: Asks you to pay with gift cards
+description: >
+  The caller sends you to a store to buy gift cards, then asks for the
+  numbers on the back.
+sounds_like:
+  - "Go to the store and buy four gift cards."
+  - "Read me the numbers on the back of the card."
+  - "Scratch off the silver strip."
+cues:
+  - 'gift ?cards?'
+  - '(google play|itunes|steam|prepaid|apple|target|walmart|ebay|amazon) cards?'
+  - '(numbers?|code|pin) on the back'
+  - 'scratch (off|the)'
+  - '(nearest|closest) (pharmacy|store|supermarket|walmart|target|cvs|walgreens)'
+why_it_works: >
+  Gift cards work like cash. Once the caller has the numbers the money is
+  gone, and it is very hard to get back.
+counter_move: >
+  Gift cards are for gifts. No real business or government agency will ever
+  tell you to buy one to pay them. Hang up.
+source:
+  title: "FTC: Avoiding and Reporting Gift Card Scams"
+  url: https://consumer.ftc.gov/articles/avoiding-and-reporting-gift-card-scams
+status: draft

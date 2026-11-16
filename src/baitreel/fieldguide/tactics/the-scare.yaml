@@ -1,0 +1,28 @@
+id: the-scare
+name: The Scare
+plain_label: Threatens arrest, lawsuits or a frozen account
+description: >
+  The caller threatens you with something frightening, such as arrest, a
+  lawsuit, deportation or losing your benefits, unless you cooperate.
+sounds_like:
+  - "A warrant will be issued for your arrest."
+  - "Your Social Security number has been suspended."
+  - "You will be taken to court."
+cues:
+  - 'warrant'
+  - '(under |your |be )?arrest(ed)?'
+  - '(police|sheriff|officers?) (will|are going to|are on) '
+  - '(law ?suit|sued|sue you|court|legal action|jail|prison|deport)'
+  - '(social security( number)?|license|benefits?) (has been|will be|is) (suspended|cancell?ed|blocked|revoked)'
+  - '(money laundering|drug trafficking|criminal (charges|activity|investigation))'
+  - 'if you (do not|don''t) cooperate'
+why_it_works: >
+  Fear is powerful and fast. A frightened person wants the threat to go away
+  and may do what they are told to make it stop.
+counter_move: >
+  A threat on the phone is pressure, not proof. Government agencies will
+  never call to demand money. Hang up.
+source:
+  title: "FTC: How To Avoid a Government Impersonation Scam"
+  url: https://consumer.ftc.gov/articles/how-avoid-government-impersonation-scam
+status: draft

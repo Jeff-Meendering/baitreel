@@ -1,0 +1,27 @@
+id: the-remote-hand
+name: The Remote Hand
+plain_label: Wants to control your computer or phone
+description: >
+  The caller asks you to install a program or visit a website that lets them
+  see and control your screen.
+sounds_like:
+  - "Download this program so I can connect to your computer."
+  - "I need to take control and remove the hackers."
+  - "Tell me the nine digit number on your screen."
+cues:
+  - '(remote|screen[- ]shar\w+) (access|control|session|support|desktop|program|software|app)'
+  - '(connect|access|log ?in|get) (in)?to your (computer|laptop|phone|device|pc|screen)'
+  - '(take|have|get|give me) control'
+  - '(download|install|open) (a|an|the|this) (\w+ )?(program|software|app|application|tool)'
+  - '(anydesk|teamviewer|ultraviewer|quick assist|supremo|zoho assist)'
+  - '(hackers?|virus(es)?|malware) (on|in|from) your (computer|network|device|phone)'
+why_it_works: >
+  Once they can see your screen, they can show you fake warnings, open your
+  bank account and move money while you watch.
+counter_move: >
+  Never give control of your computer to someone who called you. Real tech
+  companies do not phone you about problems on your computer.
+source:
+  title: "FTC: How To Spot, Avoid, and Report Tech Support Scams"
+  url: https://consumer.ftc.gov/articles/how-spot-avoid-and-report-tech-support-scams
+status: draft

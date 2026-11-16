@@ -1,0 +1,25 @@
+id: the-code-grab
+name: The Code Grab
+plain_label: Asks you to read out a verification code
+description: >
+  The caller triggers a login or password reset on your account, then asks
+  you to read back the code that arrives by text or email.
+sounds_like:
+  - "I am sending a six digit code to your phone."
+  - "Read me the code to verify your identity."
+cues:
+  - '(verification|security|one[- ]time|six[- ]digit|\d[- ]digit|confirmation|otp) (pass)?code'
+  - '(read|tell|give) (me|us) (the|that|your) (code|number|pin|password)'
+  - '(sending|sent|send) (you )?(a|the) (\w+[- ]?\w* )?code'
+  - 'code (that )?(you|we) (just )?(received|sent|got)'
+  - '(one[- ]time|temporary) (password|passcode|pin)'
+why_it_works: >
+  The code is the second lock on your account. The request sounds like a
+  routine identity check, so handing it over feels harmless.
+counter_move: >
+  Never share a verification code. It is only for you. No real bank
+  employee will ever ask for it.
+source:
+  title: "FTC: What's a verification code and why would someone ask me for it?"
+  url: https://consumer.ftc.gov/consumer-alerts/2024/03/whats-verification-code-why-would-someone-ask-me-it
+status: draft

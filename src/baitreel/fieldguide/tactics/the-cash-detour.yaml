@@ -1,0 +1,27 @@
+id: the-cash-detour
+name: The Cash Detour
+plain_label: Insists on crypto, a wire transfer or cash
+description: >
+  The caller insists there is only one way to pay: a cryptocurrency machine,
+  a wire transfer, a payment app, or cash handed to a courier.
+sounds_like:
+  - "Go to the Bitcoin machine and scan this code."
+  - "Wire the money through Western Union."
+  - "An agent will come to your house to collect the cash."
+cues:
+  - '(bitcoin|crypto(currency)?|btc) ?(atm|machine|wallet|kiosk)?'
+  - '(wire|western union|moneygram) (the |a )?(money|transfer|payment)?'
+  - '(zelle|cash ?app|venmo|paypal friends)'
+  - '(withdraw|take out|pack|put|mail|ship|send) (the |your |all )?(the )?cash'
+  - '(courier|agent|officer) will (come|collect|pick)'
+  - '(buy|purchase) gold'
+why_it_works: >
+  These ways of paying are fast and nearly impossible to reverse, which is
+  why the caller will not accept anything else.
+counter_move: >
+  Never pay someone who insists on cryptocurrency, a wire transfer, a
+  payment app or cash. Real organizations do not demand payment that way.
+source:
+  title: "FTC: How To Avoid a Scam"
+  url: https://consumer.ftc.gov/articles/how-avoid-scam
+status: draft

@@ -1,0 +1,26 @@
+id: the-leash
+name: The Leash
+plain_label: Will not let you hang up
+description: >
+  The caller insists you stay on the line, sometimes for hours, even while
+  you drive to a store or a bank.
+sounds_like:
+  - "Do not hang up the phone."
+  - "Stay on the line with me until this is resolved."
+  - "Keep me on speaker while you drive."
+cues:
+  - '(do not|don''t|cannot|can''t|must not) (hang up|disconnect|end (the|this) call|put (me|the phone) down)'
+  - '(stay|remain|keep me|keep) on the (line|phone|call)'
+  - 'stay with me'
+  - 'keep (the|this) (call|line) (open|connected|active)'
+  - 'if (you|the call) (hang up|disconnects?)'
+why_it_works: >
+  While you are on the phone with them, you cannot call your bank, look
+  anything up or ask someone else.
+counter_move: >
+  You are always allowed to hang up. Scammers keep you on the line so you
+  cannot check their story.
+source:
+  title: "FTC: How To Avoid a Scam"
+  url: https://consumer.ftc.gov/articles/how-avoid-scam
+status: draft

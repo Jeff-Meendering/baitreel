@@ -1,0 +1,28 @@
+id: the-hush
+name: The Hush
+plain_label: Tells you to keep the call secret
+description: >
+  The caller tells you not to talk to family, friends or bank staff, or
+  coaches you to lie if anyone asks what you are doing.
+sounds_like:
+  - "Do not tell anyone about this call."
+  - "The bank employees are involved, so do not speak to them."
+  - "If the cashier asks, say it is for your grandchildren."
+cues:
+  - '(do not|don''t|cannot|can''t|must not) (tell|speak|talk|mention|discuss|share|inform)'
+  - 'not (your|even your) (neighbou?r|family|husband|wife|son|daughter|children|kids)'
+  - '(keep|stay) (this|it) (between us|confidential|secret|private|quiet)'
+  - '(confidential|secret|classified|undercover) (matter|investigation|case|operation)'
+  - 'if (the|a|any) (cashier|teller|clerk|manager|bank|employee|anyone|someone|they) asks?'
+  - '(tell|say to) (her|him|them|the (cashier|teller|clerk)) (that )?(it|the|they|this)'
+  - '(employees?|staff|tellers?) (are|is|may be|might be) involved'
+why_it_works: >
+  The people around you are the ones most likely to recognize a scam. The
+  caller needs to keep them away.
+counter_move: >
+  Anyone who tells you to keep a call secret is hiding something. Stop and
+  tell someone you trust what is happening.
+source:
+  title: "FTC: How To Avoid a Scam"
+  url: https://consumer.ftc.gov/articles/how-avoid-scam
+status: draft
