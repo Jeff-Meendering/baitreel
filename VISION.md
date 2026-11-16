@@ -164,8 +164,9 @@ under pressure than a paragraph.
   machine.**
 - Personal details are detected in layers: pattern rules for spoken digits,
   emails and addresses, then named-entity detection for names and places.
-- Only the **redacted transcript** is ever sent to a hosted language model. A
-  fully offline mode uses a local model.
+- Tactic spotting runs on a **local language model** by default, so nothing
+  leaves the machine. If a hosted model is ever added as an option, it will
+  only ever be sent the **redacted transcript**.
 - Redactions are applied twice: a bleep in the audio and a mask in the
   captions.
 - Before export, a **leak check** transcribes the finished clip again and
@@ -286,7 +287,7 @@ default until answered.
 | Question | Default |
 |---|---|
 | Which real recordings are available with clear rights? | Develop against a scripted synthetic call. A real recording is needed to review Milestone 1. |
-| Is a hosted language model (Claude) available, with a small budget? | Claude for tactic spotting on redacted transcripts, with a local model through Ollama as the offline option. |
+| Is a hosted language model available, with a small budget? | **Answered:** use a local model. A hosted spotter may be added later as an opt-in. |
 | What is the exact demo date and report rubric? | Assume a demo around November 26, 2026. |
 | Is English-only acceptable for v0.1.0? | Yes. |
 | Does the maintainer bait, run a bot, or know creators who would test? | Unknown. This decides how early bot-folder ingestion matters. |
