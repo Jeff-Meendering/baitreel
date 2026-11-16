@@ -9,9 +9,13 @@ cannot be committed by accident.
         bait.json             intake record, rights statement and credit
         transcript.json       local transcript with word timings
         redactions.json       personal details found, for human checking
+        allow.json            words the person chose to leave unredacted
         flags.json            tactics spotted
+        runs/<run-id>.json    every spotter run, kept for comparison
+        labels/<labeler>.json hand-made labels, for scoring (times only, no words)
         catches/<clip-id>/    draft.json, audio.wav and clip.mp4 for each draft
       exports/<bait-id>/...   publish kits for approved clips
+      eval/                   the latest evaluation report
 """
 
 from __future__ import annotations

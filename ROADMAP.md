@@ -144,6 +144,30 @@ have the right to use.
 **Done when:** there is a report for at least one real call, and the
 maintainer can add more calls without help.
 
+### What changed while building it
+
+- **Label first, then cut.** `baitreel label` can take a recording and only
+  transcribe it, so a call can be labeled before Baitreel has spotted
+  anything. Labels started after the tool ran are marked "maybe not blind"
+  in the report.
+- **Matching by overlap, counted from both sides.** A flag is correct if a
+  labeled moment of the same tactic overlaps it; a labeled moment is found if
+  any such flag overlaps it. One moment split across two lines is not
+  punished twice.
+- **Kappa is per transcript line**, with "none" as a label, so it measures
+  agreement on where tactics are as well as which ones.
+- **Redaction counts as caught only when 80% of a detail is bleeped.** Half a
+  phone number is still a phone number.
+- **Spotter results are saved as runs**, fingerprinted by model, prompt and
+  transcript. This also fixed a Milestone 1 bug: changing the prompt used to
+  reuse flags from the old prompt.
+- **The demo script is its own answer key**, personal details included, so
+  `baitreel eval` works straight after `baitreel demo`.
+- **The labeling page uses Python's built-in web server**, not FastAPI. It
+  is one page with a handful of requests, and Milestone 3 can move it.
+- **Not built:** the usefulness numbers from the vision (share of drafts
+  kept, review time per hour). They need the review app from Milestone 3.
+
 ## Milestone 3: Cutting Room
 
 **Goal:** make review pleasant enough that a creator would choose to use it.
