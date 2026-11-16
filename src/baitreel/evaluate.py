@@ -211,6 +211,7 @@ def gather(
     wanted = [("keywords", None)] + [("local", model) for model in models]
     for spotter, model in wanted:
         label = "Spotting with " + (model or spotter)
+        report(label, 0.0, "a local model takes minutes" if model else "")
         result = spot.run(
             folder, lines, cards, spotter, model,
             on_progress=lambda p, label=label: report(label, p, ""),
