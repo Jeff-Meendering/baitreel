@@ -97,12 +97,13 @@ header {
   color: var(--red);
 }
 
+/* A small pennant flag: a triangle pointing right. */
 .pennant {
-  width: 0;
-  height: 0;
-  border-top: 17px solid transparent;
-  border-bottom: 17px solid transparent;
-  border-left: 34px solid var(--red);
+  width: 34px;
+  height: 34px;
+  flex: none;
+  background: var(--red);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
 #calltime {
