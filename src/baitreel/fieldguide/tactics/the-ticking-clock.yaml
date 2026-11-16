@@ -1,0 +1,32 @@
+id: the-ticking-clock
+name: The Ticking Clock
+plain_label: Invents a deadline to rush you
+description: >
+  The caller says something terrible will happen unless you act right now.
+  The deadline is made up. Its only job is to stop you from thinking.
+sounds_like:
+  - "You have ten minutes before the account is frozen."
+  - "This must be done today."
+  - "We do not have time."
+cues:
+  - '(right now|right away|immediately|at once)'
+  - '(in|within) the next \w+ (minutes?|hours?)'
+  - 'within \w+ (minutes?|hours?)'
+  - '\w+ minutes (left|before|or)'
+  - '(before|by) (the )?(end of (the )?(day|today)|midnight|close of business)'
+  - '(do not|don''t|we don''t|we do not) have (much |any )?time'
+  - '(running out of|no) time'
+  - 'as soon as possible'
+  - 'urgent(ly)?'
+  - 'if (we|you) (do not|don''t) act'
+  - 'permanently (frozen|closed|blocked|locked|suspended)'
+why_it_works: >
+  Pressure crowds out careful thought. A person who is rushed does not stop
+  to check the story or ask someone else.
+counter_move: >
+  Slow down. Honest organizations give you time to decide. Hang up and talk
+  it over with someone you trust.
+source:
+  title: "FTC: How To Avoid a Scam"
+  url: https://consumer.ftc.gov/articles/how-avoid-scam
+status: draft

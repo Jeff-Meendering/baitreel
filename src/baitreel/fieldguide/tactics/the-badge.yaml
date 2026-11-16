@@ -1,0 +1,29 @@
+id: the-badge
+name: The Badge
+plain_label: Claims to be your bank, the government or a tech company
+description: >
+  The caller borrows the authority of an organization you already trust. They
+  may give a title, a badge number or a case number to sound official.
+sounds_like:
+  - "This is the fraud department at your bank."
+  - "I am an officer with the Social Security Administration."
+  - "My badge number is..."
+cues:
+  - 'fraud (department|prevention|team|division)'
+  - 'security (department|team|division)'
+  - '(this is|i am|i''m|my name is) (officer|agent|inspector|detective|sergeant)'
+  - 'badge (number|id)'
+  - 'case (number|id)'
+  - '(calling|call) (you )?from (the |your )?(bank|irs|social security|medicare|microsoft|amazon|apple|paypal|treasury|federal)'
+  - '(federal trade commission|social security administration|internal revenue)'
+  - 'employee id'
+why_it_works: >
+  We are taught to cooperate with banks and officials. Caller ID can be faked,
+  so the name on your phone proves nothing.
+counter_move: >
+  Hang up. Then call the organization yourself, using the number on your card
+  or statement. Never use a number the caller gave you.
+source:
+  title: "FTC: How To Avoid a Scam"
+  url: https://consumer.ftc.gov/articles/how-avoid-scam
+status: draft

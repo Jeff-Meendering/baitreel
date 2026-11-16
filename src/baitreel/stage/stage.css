@@ -1,0 +1,341 @@
+/*
+  The look: a case file on ruled paper. Ink for the transcript, a red rubber
+  stamp for the flag, a yellow highlighter for the manipulative words, and a
+  black marker for anything redacted.
+
+  Sizes are in pixels for a 1080 x 1920 frame. Text is large and high
+  contrast on purpose: clips are made for older viewers first.
+  Keep important content between y=160 and y=1600; apps cover the rest.
+*/
+
+@font-face {
+  font-family: "Atkinson";
+  src: url("fonts/AtkinsonHyperlegible-Regular.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Atkinson";
+  src: url("fonts/AtkinsonHyperlegible-Bold.ttf");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Anton";
+  src: url("fonts/Anton-Regular.ttf");
+}
+@font-face {
+  font-family: "Special Elite";
+  src: url("fonts/SpecialElite-Regular.ttf");
+}
+
+:root {
+  --paper: #f2eadb;
+  --ink: #1a1917;
+  --muted: #6f6759;
+  --red: #d42a20;
+  --highlighter: #ffe04a;
+  --green: #17694d;
+  --blue: #244a7c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html,
+body {
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+#stage {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  color: var(--ink);
+  font-family: "Atkinson", sans-serif;
+}
+
+/* Ruled paper with a margin line and a soft vignette. */
+.paper {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(90, 70, 40, 0.16) 100%),
+    linear-gradient(90deg, transparent 58px, rgba(212, 42, 32, 0.28) 58px, rgba(212, 42, 32, 0.28) 61px, transparent 61px),
+    repeating-linear-gradient(180deg, transparent 0 94px, rgba(36, 74, 124, 0.13) 94px 96px),
+    var(--paper);
+}
+
+#flash {
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  opacity: 0;
+}
+
+/* --- Header ---------------------------------------------------------------- */
+
+header {
+  position: absolute;
+  top: 168px;
+  left: 90px;
+  right: 80px;
+  font-family: "Special Elite", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 40px;
+  color: var(--red);
+}
+
+/* A small pennant flag: a triangle pointing right. */
+.pennant {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  background: var(--red);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+#calltime {
+  margin-top: 10px;
+  font-size: 28px;
+  color: var(--muted);
+}
+
+#prompt {
+  position: absolute;
+  top: 292px;
+  left: 90px;
+  right: 80px;
+  font-family: "Anton", sans-serif;
+  font-size: 92px;
+  line-height: 1.04;
+  text-transform: uppercase;
+}
+
+#tape {
+  position: absolute;
+  top: 560px;
+  left: 90px;
+  width: 920px;
+  height: 150px;
+}
+
+/* --- Captions -------------------------------------------------------------- */
+
+#captions,
+#replay {
+  position: absolute;
+  top: 780px;
+  left: 90px;
+  width: 910px;
+}
+
+.card {
+  display: none;
+  font-size: 84px;
+  font-weight: 700;
+  line-height: 1.22;
+}
+
+.card.on {
+  display: block;
+}
+
+.speaker {
+  display: block;
+  margin-bottom: 14px;
+  font-family: "Special Elite", monospace;
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.speaker.scammer {
+  color: var(--red);
+}
+
+.speaker.target {
+  color: var(--blue);
+}
+
+.word {
+  color: rgba(26, 25, 23, 0.26);
+  padding: 0 0.04em;
+  border-radius: 6px;
+}
+
+.word.said {
+  color: var(--ink);
+}
+
+/* Black marker over anything redacted. The label says what kind of detail it hid. */
+.word.redacted {
+  display: inline-block;
+  padding: 0 0.5em;
+  background: var(--ink);
+  color: var(--paper) !important;
+  font-family: "Special Elite", monospace;
+  font-size: 0.42em;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  line-height: 2.1;
+  text-transform: uppercase;
+  vertical-align: 0.22em;
+  opacity: 0.26;
+}
+
+.word.redacted.said {
+  opacity: 1;
+}
+
+/* Yellow highlighter, swept across as the word is spoken in the replay. */
+#replay .word {
+  color: var(--ink);
+  background-image: linear-gradient(var(--highlighter), var(--highlighter));
+  background-repeat: no-repeat;
+  background-position: 0 62%;
+  background-size: 0% 62%;
+}
+
+#replay .word.redacted {
+  opacity: 1;
+  background: var(--ink);
+}
+
+/* --- The stamp ------------------------------------------------------------- */
+
+#stamp {
+  position: absolute;
+  top: 1180px; /* the stamp's centre: stage.js shifts it up by half its height */
+  left: 50%;
+  width: 880px;
+  margin-left: -440px;
+  padding: 30px 34px 34px;
+  border: 12px solid var(--red);
+  border-radius: 26px;
+  outline: 4px solid var(--red);
+  outline-offset: 10px;
+  background: rgba(242, 234, 219, 0.9);
+  color: var(--red);
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0;
+  transform-origin: 50% 50%;
+}
+
+.stamp-top {
+  font-family: "Special Elite", monospace;
+  font-size: 48px;
+  letter-spacing: 0.3em;
+}
+
+#stamp-name {
+  margin: 8px 0 14px;
+  font-family: "Anton", sans-serif;
+  font-size: 170px;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+#stamp-label {
+  font-family: "Atkinson", sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: none;
+  text-wrap: balance;
+}
+
+/* --- What to do instead ---------------------------------------------------- */
+
+#counter {
+  position: absolute;
+  top: 620px;
+  left: 70px;
+  width: 940px;
+  padding: 0 0 44px;
+  border: 6px solid var(--green);
+  border-radius: 28px;
+  background: #fbf7ee;
+  overflow: hidden;
+  opacity: 0;
+  box-shadow: 0 18px 0 rgba(23, 105, 77, 0.18);
+}
+
+.counter-head {
+  padding: 30px 48px 24px;
+  background: var(--green);
+  color: #fbf7ee;
+  font-family: "Anton", sans-serif;
+  font-size: 68px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+#counter-body {
+  padding: 44px 48px 0;
+  font-size: 66px;
+  font-weight: 700;
+  line-height: 1.24;
+}
+
+#counter-source {
+  padding: 34px 48px 0;
+  font-family: "Special Elite", monospace;
+  font-size: 30px;
+  color: var(--muted);
+}
+
+/* --- Credit ---------------------------------------------------------------- */
+
+#credit {
+  position: absolute;
+  top: 700px;
+  left: 90px;
+  width: 900px;
+  opacity: 0;
+}
+
+.credit-label {
+  font-family: "Special Elite", monospace;
+  font-size: 40px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+#credit-name {
+  margin: 16px 0 48px;
+  font-family: "Anton", sans-serif;
+  font-size: 110px;
+  line-height: 1.06;
+}
+
+.credit-note {
+  font-size: 42px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+footer {
+  position: absolute;
+  top: 1560px;
+  left: 90px;
+  right: 80px;
+  font-family: "Special Elite", monospace;
+  font-size: 30px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}

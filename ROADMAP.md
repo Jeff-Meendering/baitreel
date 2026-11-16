@@ -52,8 +52,8 @@ can leave the computer is flag spotting, and it only ever sees redacted text.
 |---|---|---|
 | Pipeline and command line | Python 3.12, managed with `uv` | The speech and language tooling lives in Python, and `uv` gives contributors a one-command setup |
 | Transcription | `faster-whisper`, run locally, with word-level timestamps | Audio stays on the machine. Word timings drive captions and bleeps |
-| Personal-detail detection | Pattern rules plus Microsoft Presidio | Layered, local and inspectable |
-| Flag spotting | Claude through the Anthropic API by default, a local model through Ollama as the offline option | Best accuracy by default, with a fully offline path. The model is constrained to Field Guide entries |
+| Personal-detail detection | Pattern rules, plus spaCy to find names | Layered, local and inspectable |
+| Flag spotting | A model on the user's own computer through Ollama (Gemma 4 12B by default), with a keyword spotter as fallback and baseline | Nothing leaves the machine. The model is constrained to Field Guide entries. A hosted model can be added later as an opt-in spotter |
 | Audio and encoding | `ffmpeg` | The standard tool, called as an external program |
 | Clip rendering | The clip is a plain web page (HTML, CSS and JavaScript) captured frame by frame with headless Chromium | The preview a human approves is the same code that renders the export |
 | Web app (Milestone 3) | FastAPI serving a small TypeScript front end | A thin layer over the same pipeline the command line uses |
@@ -69,9 +69,11 @@ can leave the computer is flag spotting, and it only ever sees redacted text.
 - **Speaker separation is simple at first.** v0.1.0 labels who is speaking from
   the transcript, with human correction. Acoustic speaker separation comes
   later because the best models need extra accounts and downloads.
-- **A hosted model sees redacted text.** People who want nothing to leave the
-  machine can use the local model and accept lower accuracy. Milestone 2
-  measures that gap.
+- **Everything runs locally, which is slower.** On a 16 GB M1 laptop,
+  transcribing and spotting together took about as long as the call itself
+  (measured on one short demo call). A hosted model would be faster and
+  probably more accurate, and could be added as an opt-in spotter that only
+  ever sees redacted text. Milestone 2 gives the numbers to decide that.
 
 ---
 
@@ -110,6 +112,19 @@ can leave the computer is flag spotting, and it only ever sees redacted text.
 have the right to use.
 
 **Not yet:** a web app, batch processing, speaker separation by voice.
+
+### What changed while building it
+
+- **The spotter is local by default.** The maintainer chose a local model
+  over a hosted one, so no transcript text leaves the computer at all.
+- **Names are found with spaCy and context rules**, not Presidio. The rules
+  that matter for phone calls (digits read aloud, spelled-out names) had to
+  be written by hand either way, and the result is smaller and easier to read.
+- **Lines are split at measured silences.** The speech model's own segments
+  ran two speakers together too often.
+- **Speaker tags come from the local model reading the text.** They are
+  usually right and sometimes wrong, so they can be turned off.
+- **The leak check stays in Milestone 3.** For now a full listen is the gate.
 
 ## Milestone 2: Second Opinion
 
@@ -199,8 +214,5 @@ should reorder this list.
 ## What the maintainer needs to provide
 
 - A real recording with clear rights, for the Milestone 1 review.
-- An Anthropic API key in a local `.env` file, or a decision to use the local
-  model only.
-- Permission to install `ffmpeg` and `uv` on the development machine.
 - Time to label at least one call by hand for Milestone 2.
 - Answers to the open questions in `VISION.md`.

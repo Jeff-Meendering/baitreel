@@ -1,0 +1,97 @@
+# The scripted demo call.
+#
+# This is NOT a real call. Baitreel reads it aloud with synthetic voices so
+# that anyone can try the whole pipeline without a real recording, and so the
+# tests have something to check against. The bank, the people and every
+# number below are invented. Phone numbers use the 555-01xx range that is
+# reserved for fiction.
+#
+# Each scammer line names the tactic it demonstrates. The pipeline never sees
+# these labels; they are the answer key.
+
+title: Edna and the sourdough starter
+credit: Baitreel demo script (synthetic voices)
+voices:
+  scammer: Daniel
+  target: Samantha
+turns:
+  - speaker: scammer
+    tactic: the-badge
+    text: >
+      Hello, this is Officer Daniel Hart from the fraud department at
+      Fernhollow Bank. Am I speaking with Mrs. Edna Pruitt?
+  - speaker: target
+    text: >
+      Oh! Yes, this is Edna. Hold on, dear, let me turn down the radio.
+      Gerald doesn't like it loud. Gerald is my sourdough starter.
+  - speaker: scammer
+    tactic: the-ticking-clock
+    text: >
+      Ma'am, this is very serious. We have detected a suspicious charge on
+      your account. If we do not act in the next ten minutes, your account
+      will be permanently frozen.
+  - speaker: target
+    text: Ten minutes! Oh my. I have bread in the oven for forty.
+  - speaker: scammer
+    tactic: the-leash
+    text: >
+      Please listen carefully. For your own protection, do not hang up this
+      call. Stay on the line with me until this is resolved.
+  - speaker: target
+    text: >
+      All right. Should I call my neighbor? She used to work at a bank.
+      Her name is Margaret Dolan. Her number is 5 5 5, 0 1 4 2.
+  - speaker: scammer
+    tactic: the-hush
+    text: >
+      No, ma'am. Do not tell anyone about this call. Not your neighbor, not
+      your family, and not anyone at the bank. Some of the bank employees
+      are involved in this fraud.
+  - speaker: target
+    text: Gracious. Even the nice young man with the mustache?
+  - speaker: scammer
+    tactic: the-safe-account
+    text: >
+      Even him. Now, to keep your money safe, you need to move your savings
+      into a secure government account. I will give you the account number.
+  - speaker: target
+    text: Move it? But it has been in the same place since nineteen eighty four.
+  - speaker: scammer
+    tactic: the-code-grab
+    text: >
+      First I must verify your identity. I am sending a six digit code to
+      your phone. Read me the code as soon as you receive it.
+  - speaker: target
+    text: >
+      It says 4 7 1 9 2 0. Oh dear, was I supposed to read that out loud?
+  - speaker: scammer
+    tactic: the-remote-hand
+    text: >
+      Thank you. Next, I need to connect to your computer to remove the
+      hackers. Please download a remote access program so that I can take
+      control.
+  - speaker: target
+    text: The computer is under the cat. It will be a minute.
+  - speaker: scammer
+    tactic: the-gift-card-detour
+    text: >
+      Ma'am, we do not have time. There is one more way. Drive to the nearest
+      pharmacy and buy four gift cards. Then read me the numbers on the back.
+  - speaker: target
+    text: Gift cards? For the bank? Who is the gift for?
+  - speaker: scammer
+    tactic: the-hush
+    text: >
+      It is not a gift. It is a secure payment. And if the cashier asks, tell
+      her the cards are for your grandchildren.
+  - speaker: target
+    text: >
+      You want me to fib to the cashier. Officer, Gerald and I have been
+      talking, and Gerald thinks you are a scammer.
+  - speaker: scammer
+    tactic: the-scare
+    text: >
+      Who is Gerald? Ma'am, if you do not cooperate, a warrant will be issued
+      for your arrest today.
+  - speaker: target
+    text: Gerald is rising nicely, thank you. Goodbye now, dear.

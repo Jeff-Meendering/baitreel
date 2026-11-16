@@ -1,0 +1,26 @@
+id: the-oops-refund
+name: The Oops Refund
+plain_label: Says they refunded too much and you must pay it back
+description: >
+  The caller offers a refund, pretends to send far too much by "mistake",
+  then begs or demands that you return the difference.
+sounds_like:
+  - "I typed an extra zero. You received five thousand instead of five hundred."
+  - "You have to send the extra money back or I will lose my job."
+cues:
+  - '(refund(ed)?|credited|transferred|sent) (you )?(too much|extra|more than)'
+  - '(extra|additional) (zero|money|amount)'
+  - '(send|return|pay|give) (it |the money |the (extra|difference|remaining) )?back'
+  - '(i|we) (made|did) a (big |huge |terrible )?mistake'
+  - '(lose|losing) my job'
+  - '(refund|cancell?ation) (department|form|process|amount)'
+why_it_works: >
+  It makes you feel that you owe them, and that an honest person would
+  return the money. The "refund" was never real.
+counter_move: >
+  If a caller says they refunded you too much and you must pay it back, it
+  is a scam. Hang up and check your account yourself.
+source:
+  title: "FTC: How To Spot, Avoid, and Report Tech Support Scams"
+  url: https://consumer.ftc.gov/articles/how-spot-avoid-and-report-tech-support-scams
+status: draft

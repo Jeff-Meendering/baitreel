@@ -1,0 +1,25 @@
+id: the-safe-account
+name: The Safe Account
+plain_label: Says to move your money to "protect" it
+description: >
+  The caller says your account is compromised and that you must transfer
+  your savings to a "safe" or "secure" account that they control.
+sounds_like:
+  - "Move your savings into a secure government account."
+  - "We need to transfer your funds to protect them."
+  - "I will give you the new account number."
+cues:
+  - '(safe|secure|protected|government|federal|new|temporary) (\w+ )?(account|locker|wallet|vault)'
+  - '(move|transfer|shift|withdraw) (all )?(of )?(your|the) (money|savings|funds|balance)'
+  - '(to|and) (keep|protect|secure|safeguard) (your|the) (money|savings|funds)'
+  - 'your (money|savings|funds|account) (is|are) (not safe|at risk|in danger|compromised)'
+why_it_works: >
+  It sounds like the caller is helping. The story turns your wish to protect
+  your savings into the very thing that loses them.
+counter_move: >
+  Never move money to "protect" it. Your money is safe where it is. Call
+  your bank using the number on your statement.
+source:
+  title: "FTC: Never move your money to protect it"
+  url: https://consumer.ftc.gov/consumer-alerts/2024/03/never-move-your-money-protect-it-thats-scam
+status: draft
