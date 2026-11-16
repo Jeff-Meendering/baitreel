@@ -1,0 +1,79 @@
+# ---------------------------------------------------------------------------
+# Baitreel .gitignore
+#
+# Two rules matter more than the rest:
+#   1. Never commit call recordings, real transcripts or rendered clips.
+#   2. Never commit API keys or other secrets.
+# ---------------------------------------------------------------------------
+
+# --- Recordings and rendered media (never commit) --------------------------
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.opus
+*.wma
+*.aiff
+*.amr
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.avi
+
+# --- Working data: transcripts, flags, clips, exports ----------------------
+/workspace/
+/baits/
+/recordings/
+/exports/
+/out/
+*.baitreel/
+
+# --- Secrets ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+
+# --- Downloaded models -----------------------------------------------------
+/models/
+*.bin
+*.gguf
+*.safetensors
+*.pt
+*.onnx
+
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# --- Node (web app and clip renderer) --------------------------------------
+node_modules/
+.vite/
+*.tsbuildinfo
+npm-debug.log*
+
+# --- Editors and operating systems -----------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# --- Local agent settings --------------------------------------------------
+.claude/settings.local.json
