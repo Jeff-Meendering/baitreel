@@ -1,0 +1,56 @@
+<!doctype html>
+<!--
+  The stage: the page that draws a Baitreel clip.
+
+  It is a pure function of (clip spec, time). `stage.load(spec)` builds the
+  page once; `stage.seek(t)` draws the frame at t seconds. The renderer calls
+  seek for every frame and takes a screenshot, so the exported video is
+  exactly what this page shows. Nothing here uses CSS animations or timers.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Baitreel stage</title>
+    <link rel="stylesheet" href="stage.css" />
+  </head>
+  <body>
+    <main id="stage" data-beat="play">
+      <div class="paper"></div>
+      <div id="flash"></div>
+
+      <header>
+        <div class="kicker"><span class="pennant"></span><span id="kicker"></span></div>
+        <div id="calltime"></div>
+      </header>
+
+      <div id="prompt">Can you spot<br />the red flag?</div>
+      <canvas id="tape" width="920" height="150"></canvas>
+
+      <section id="captions"></section>
+      <section id="replay"></section>
+
+      <div id="stamp">
+        <div class="stamp-top">Red flag</div>
+        <div id="stamp-name"></div>
+        <div id="stamp-label"></div>
+      </div>
+
+      <section id="counter">
+        <div class="counter-head">What to do instead</div>
+        <div id="counter-body"></div>
+        <div id="counter-source"></div>
+      </section>
+
+      <section id="credit">
+        <div class="credit-label">Recording</div>
+        <div id="credit-name"></div>
+        <div class="credit-note">
+          A person reviewed this clip before it was published.<br />Made with Baitreel.
+        </div>
+      </section>
+
+      <footer id="byline"></footer>
+    </main>
+    <script src="stage.js"></script>
+  </body>
+</html>
