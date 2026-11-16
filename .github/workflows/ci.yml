@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Runs first and needs nothing installed: no recordings, no secrets.
+      - name: Repository hygiene
+        run: python3 scripts/check_repo_hygiene.py
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install Baitreel
+        run: uv sync
+
+      - name: Install the headless browser used for rendering
+        run: uv run playwright install --with-deps chromium
+
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Field Guide
+        run: uv run baitreel guide --check
+
+      - name: Tests
+        run: uv run pytest
