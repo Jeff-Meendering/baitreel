@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Baitreel labeling</title>
+    <link rel="stylesheet" href="labeler.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="who">
+        <span class="brand">Baitreel</span>
+        <span class="title" id="title">Loading the call…</span>
+        <span class="labeler" id="labeler"></span>
+      </div>
+      <div class="status">
+        <span id="saved" class="saved" aria-live="polite"></span>
+        <button id="finish" class="finish" type="button">Finish</button>
+      </div>
+    </header>
+
+    <section class="player" aria-label="Recording">
+      <audio id="audio" preload="auto"></audio>
+      <button id="play" class="play" type="button" aria-label="Play">▶</button>
+      <button id="back" type="button" title="Back 5 seconds (←)">−5s</button>
+      <button id="ahead" type="button" title="Ahead 5 seconds (→)">+5s</button>
+      <span id="clock" class="clock">0:00 / 0:00</span>
+      <input id="scrub" type="range" min="0" max="100" step="0.1" value="0" aria-label="Position" />
+      <label class="speed">
+        Speed
+        <select id="speed">
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+        </select>
+      </label>
+      <label class="follow"><input id="follow" type="checkbox" checked /> Follow along</label>
+    </section>
+
+    <div class="layout">
+      <main>
+        <details class="howto" id="howto" open>
+          <summary>How to label this call</summary>
+          <ol>
+            <li>Listen to the whole call. Read along in the transcript.</li>
+            <li>
+              When the caller uses a scam tactic, select those words and pick the tactic. Click a
+              word to select it, shift-click to extend, or drag across words.
+            </li>
+            <li>
+              Mark <b>every personal detail you hear</b>: names, phone and card numbers, codes,
+              addresses, emails. Trust your ears over the transcript. If the words are wrong or
+              missing, press <kbd>[</kbd> and <kbd>]</kbd> while it plays to select by time.
+            </li>
+            <li>Press <b>Finish</b> when you have been through the whole call.</li>
+          </ol>
+          <p>
+            You will not see what Baitreel found. That is on purpose: your labels are the answer
+            key it is scored against. Everything is saved as you go.
+          </p>
+        </details>
+        <p class="warning" id="warning" hidden></p>
+        <div id="transcript" class="transcript" aria-label="Transcript"></div>
+      </main>
+
+      <aside class="panel">
+        <section class="card" aria-labelledby="sel-h">
+          <h2 id="sel-h">Selection</h2>
+          <p id="selection" class="selection">Nothing selected.</p>
+          <button id="clear" type="button" class="link" hidden>Clear (Esc)</button>
+        </section>
+
+        <section class="card" aria-labelledby="tac-h">
+          <h2 id="tac-h">Which tactic is this?</h2>
+          <div id="tactics" class="tactics"></div>
+        </section>
+
+        <section class="card" aria-labelledby="pii-h">
+          <h2 id="pii-h">Or a personal detail</h2>
+          <div id="kinds" class="kinds"></div>
+        </section>
+
+        <section class="card" aria-labelledby="list-h">
+          <h2 id="list-h">Your labels <span id="count" class="count"></span></h2>
+          <ol id="list" class="list"></ol>
+        </section>
+
+        <p class="keys">
+          <kbd>Space</kbd> play or pause · <kbd>←</kbd><kbd>→</kbd> 5 seconds ·
+          <kbd>[</kbd><kbd>]</kbd> select by time · <kbd>Esc</kbd> clear
+        </p>
+      </aside>
+    </div>
+
+    <div id="done" class="done" hidden>
+      <div>
+        <h2>Labels saved</h2>
+        <p>You can close this tab. To score Baitreel against your labels, run:</p>
+        <pre>uv run baitreel eval</pre>
+      </div>
+    </div>
+
+    <script src="labeler.js"></script>
+  </body>
+</html>
