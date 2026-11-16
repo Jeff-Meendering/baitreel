@@ -109,6 +109,30 @@ class Flag(BaseModel):
     spotter: str = ""
 
 
+class Run(BaseModel):
+    """One spotter's answer for one call, saved so it can be reused and compared.
+
+    Saved as ``runs/<id>.json`` in the bait's folder. A run is reused only
+    when the spotter, its version and the transcript lines it read are all
+    unchanged, so ``baitreel eval`` can line up runs of different models and
+    prompt versions on the same call.
+    """
+
+    id: str
+    spotter: Literal["local", "keywords"]
+    model: str = ""  # the local model, such as gemma4:12b; empty for keywords
+    version: str  # fingerprint of the prompt (local) or cue patterns (keywords)
+    lines: str  # fingerprint of the masked transcript lines the spotter read
+    seconds: float  # how long spotting took
+    created_at: datetime
+    flags: list[Flag]
+
+    @property
+    def name(self) -> str:
+        """How the run is described to people, such as "local/gemma4:12b"."""
+        return f"local/{self.model}" if self.spotter == "local" else self.spotter
+
+
 # --- Clips ------------------------------------------------------------------
 
 

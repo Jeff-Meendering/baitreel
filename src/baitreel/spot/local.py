@@ -12,6 +12,7 @@ tactic ids from the Field Guide.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from collections.abc import Callable
@@ -46,9 +47,9 @@ def _host() -> str:
     return host.replace("0.0.0.0", "127.0.0.1").rstrip("/")
 
 
-def available() -> tuple[bool, str]:
+def available(model: str | None = None) -> tuple[bool, str]:
     """Is a usable local model ready? Returns (ready, explanation)."""
-    name = model_name()
+    name = model or model_name()
     try:
         tags = httpx.get(f"{_host()}/api/tags", timeout=3.0).json().get("models", [])
     except (httpx.HTTPError, ValueError):
@@ -63,12 +64,12 @@ def available() -> tuple[bool, str]:
     return False, f"The model {name} is not downloaded. Run: ollama pull {name}"
 
 
-def _ask(system: str, user: str, schema: dict) -> dict:
+def _ask(system: str, user: str, schema: dict, model: str | None = None) -> dict:
     response = httpx.post(
         f"{_host()}/api/chat",
         timeout=TIMEOUT,
         json={
-            "model": model_name(),
+            "model": model or model_name(),
             "stream": False,
             # Step-by-step "thinking" made a 12B model take over ten minutes per
             # request on a 16 GB laptop. The schema below keeps answers on track.
@@ -159,23 +160,38 @@ def build_prompt(lines: list[Line], guide: dict[str, Tactic]) -> str:
     return f"{_guide_text(guide)}\n\n{TASK}\n\nTRANSCRIPT\n{transcript}"
 
 
+def prompt_version(guide: dict[str, Tactic]) -> str:
+    """A short fingerprint of everything that shapes the model's answer except the transcript.
+
+    It changes whenever the instructions, the Field Guide text, the answer
+    format or the chunking change, so saved results from an older prompt are
+    never mistaken for results from this one. ``baitreel eval`` uses it to
+    compare prompt versions side by side.
+    """
+    parts = [SYSTEM, TASK, _guide_text(guide), json.dumps(_schema(guide), sort_keys=True),
+             f"{CHUNK}/{OVERLAP}/{CONTEXT_TOKENS}"]  # fmt: skip
+    return hashlib.sha256("\n".join(parts).encode()).hexdigest()[:8]
+
+
 def spot(
     lines: list[Line],
     guide: dict[str, Tactic],
     on_progress: Callable[[float], None] | None = None,
+    model: str | None = None,
 ) -> list[Flag]:
-    ready, reason = available()
+    model = model or model_name()
+    ready, reason = available(model)
     if not ready:
         raise RuntimeError(reason)
     by_id = {line.id: line for line in lines}
-    spotter = f"local/{model_name()}"
+    spotter = f"local/{model}"
     flags: dict[str, Flag] = {}
     starts = list(range(0, max(len(lines), 1), CHUNK - OVERLAP))
     for n, start in enumerate(starts):
         chunk = lines[start : start + CHUNK]
         if not chunk:
             break
-        answer = _ask(SYSTEM, build_prompt(chunk, guide), _schema(guide))
+        answer = _ask(SYSTEM, build_prompt(chunk, guide), _schema(guide), model)
         in_chunk = {line.id: line for line in chunk}
         for flag in validate(answer.get("flags", []), in_chunk, guide, spotter):
             # Lines in the overlap are seen twice. Keep the more confident reading.

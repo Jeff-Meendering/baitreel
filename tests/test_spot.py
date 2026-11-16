@@ -87,3 +87,22 @@ def test_prompt_shows_the_model_only_masked_text():
     prompt = local.build_prompt([Line(0, 0.0, 2.0, "Her number is [number]")], GUIDE)
     assert "[0] Her number is [number]" in prompt
     assert prompt.rstrip().endswith("[number]")  # the transcript comes last, for caching
+
+
+def test_a_changed_prompt_is_a_new_version(monkeypatch):
+    """Saved runs are keyed by prompt version, so an edited prompt never reuses old flags."""
+    before = local.prompt_version(GUIDE)
+    monkeypatch.setattr(local, "TASK", local.TASK + "\n- One more rule.")
+    assert local.prompt_version(GUIDE) != before
+
+
+def test_runs_are_saved_and_reused(tmp_path):
+    from baitreel import spot
+
+    lines = [Line(0, 0.0, 3.0, "Do not tell anyone about this call.")]
+    first = spot.run(tmp_path, lines, GUIDE, "keywords")
+    assert first.name == "keywords" and first.flags[0].tactic == "the-hush"
+    assert spot.run(tmp_path, lines, GUIDE, "keywords").created_at == first.created_at
+    changed = [Line(0, 0.0, 3.0, "Do not tell [name] about this call.")]
+    assert spot.run(tmp_path, changed, GUIDE, "keywords").id != first.id
+    assert len(spot.saved_runs(tmp_path)) == 2

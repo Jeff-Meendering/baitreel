@@ -7,6 +7,9 @@ more false alarms than a language model does.
 
 from __future__ import annotations
 
+import hashlib
+from pathlib import Path
+
 from ..fieldguide import Tactic
 from ..models import Flag
 from . import Line, cue_matches
@@ -35,3 +38,9 @@ def spot(lines: list[Line], guide: dict[str, Tactic]) -> list[Flag]:
                 )
             )
     return flags
+
+
+def version(guide: dict[str, Tactic]) -> str:
+    """A fingerprint of this spotter's rules: its own code and every card's cue patterns."""
+    cues = "\n".join(f"{t.id}: {' | '.join(t.cues)}" for t in guide.values())
+    return hashlib.sha256((Path(__file__).read_text() + cues).encode()).hexdigest()[:8]
